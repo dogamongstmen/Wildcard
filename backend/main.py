@@ -57,10 +57,11 @@ def main() -> None:
         )
     )
 
-    socket: Optional[Socket] = server.listen("", 5000)
+    socket: Socket = cast(Socket, server.listen("", 5000))
 
     # Block the main thread.
-    cast(Thread, server._listening_thread).join()
+    input("Press enter to shutdown the server: ")
+    server.shutdown(socket)
 
 
 main()

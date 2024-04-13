@@ -33,12 +33,25 @@ class ExtendedHTTPRequestHandler(BaseHTTPRequestHandler):
 
         # print(self.path, route)
 
+        headers: Dict[str, str] = dict()
+        header_keys = self.headers.keys()
+        header_values = self.headers.values()
+        for i, key in enumerate(header_keys):
+            headers[key.lower()] = header_values[i]
+
         params: Dict[str, str] = dict()
         if route == None or not route.populate_params(param_values, out_params=params):
-            self.send_response(404)
-            self.send_header("content-type", "text/html")
-            self.end_headers()
-            self.wfile.write(b"<h1>Not found.<h1>")
+            self.server.not_found_handler(
+                Request(
+                    self.path,
+                    RequestMethod[method_string],
+                    headers,
+                    self.server.state,
+                    params,
+                    self.rfile,
+                ),
+                Response(self),
+            )
             return
         if route.handlers.get(method_string) == None:
             self.send_response(405)
@@ -47,14 +60,13 @@ class ExtendedHTTPRequestHandler(BaseHTTPRequestHandler):
             self.wfile.write(b"<h1>Method not allowed.<h1>")
             return
 
-        headers: Dict[str, str] = dict()
-        header_keys = self.headers.keys()
-        header_values = self.headers.values()
-        for i, key in enumerate(header_keys):
-            headers[key.lower()] = header_values[i]
-
         req: Request = Request(
-            self.path, RequestMethod.GET, headers, self.server.state, params, self.rfile
+            self.path,
+            RequestMethod[method_string],
+            headers,
+            self.server.state,
+            params,
+            self.rfile,
         )
         res: Response = Response(self)
 
