@@ -28,8 +28,6 @@ def trie_route_search(
     while i < len(key_str):
         key: str = key_str[i]
 
-        # print(key)
-
         next_node: PrefixTreeNode[T] = cast(
             PrefixTreeNode[T], current.children.get(key)
         )

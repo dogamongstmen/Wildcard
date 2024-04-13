@@ -1,4 +1,5 @@
 from typing import Dict, List, Self
+from commontypes.boolean import false, true
 from server.handling.handler import RequestHandler
 
 
@@ -38,8 +39,13 @@ class Route:
         self.handlers["DELETE"] = handler
         return self
 
-    def populate_params(self, param_values: List[str]) -> Dict[str, str]:
-        params: Dict[str, str] = dict()
+    def populate_params(
+        self, param_values: List[str], out_params: Dict[str, str]
+    ) -> bool:
+        if len(param_values) != len(self.params):
+            return false
+
         for i, param in enumerate(self.params):
-            params[param] = param_values[i]
-        return params
+            out_params[param] = param_values[i]
+
+        return true
