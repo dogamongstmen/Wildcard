@@ -1,14 +1,9 @@
-from http.server import BaseHTTPRequestHandler
-from os import system
-from socketserver import BaseRequestHandler
-from typing import Dict, List, TypedDict, cast
+from threading import Thread
+from typing import List, Optional, TypedDict, cast
 from server.handling.request import Request
 from server.handling.response import Response
 from server.routing.route import Route
-from server.serve.internalhandler import ExtendedHTTPRequestHandler
-from server.serve.internalserver import ExtendedHTTPServer
-from structs.prefixtree.tree import PrefixTree
-from server.routing.utils import route_path_to_trie_key, trie_route_search
+from server.server import Server, Socket
 
 
 class BaseProfileParams(TypedDict):
@@ -49,47 +44,23 @@ def profile_single_comment_handler(
     res.html(f'<h1>{req.params.get("profile_id")}->{req.params.get("comment_id")}</h1>')
 
 
-def cart_handler(req: Request[List[str], None], res: Response) -> None:
-    print("Fruits in my shopping cart: ", req.state)
-
-    cart: str = "".join([f"<li>{fruit}</li>" for fruit in req.state])
-    res.html(
-        f"""<h1>Shopping cart:</h1>
-             <ul>
-             {cart}
-             </ul>"""
-    )
-
-
 def main() -> None:
-    # system("clear")
 
-    routes: PrefixTree[Route] = PrefixTree()
+    fruits: List[str] = ["🍇", "🍉", "🍊", "🍌", "🥭", "🫐", "🍎"]
+    server: Server[List[str]] = Server(fruits)
 
-    routes.insert(route_path_to_trie_key("/cart"), Route("/cart").get(cart_handler))
-
-    routes.insert(
-        route_path_to_trie_key("/profile/:profile_id"),
-        Route("/profile/:profile_id").get(base_profile_handler),
-    )
-
-    routes.insert(
-        route_path_to_trie_key("/profile/:profile_id/comments"),
-        Route("/profile/:profile_id/comments").get(profile_comments_handler),
-    )
-
-    routes.insert(
-        route_path_to_trie_key("/profile/:profile_id/comments/:comment_id"),
+    server.route(Route("/profile/:profile_id").get(base_profile_handler))
+    server.route(Route("/profile/:profile_id/comments").get(profile_comments_handler))
+    server.route(
         Route("/profile/:profile_id/comments/:comment_id").get(
             profile_single_comment_handler
-        ),
+        )
     )
 
-    test_state: List[str] = ["🍇", "🍉", "🍊", "🍌", "🥭", "🫐", "🍎"]
-    httpd: ExtendedHTTPServer[List[str]] = ExtendedHTTPServer(
-        ("", 5000), ExtendedHTTPRequestHandler, routes, test_state
-    )
-    httpd.serve_forever()
+    socket: Optional[Socket] = server.listen("", 5000)
+
+    # Block the main thread.
+    cast(Thread, server._listening_thread).join()
 
 
 main()
