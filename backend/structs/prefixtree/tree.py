@@ -1,6 +1,6 @@
 from typing import Final, Generic, Optional, TypeVar, cast
 
-from node import PrefixTreeNode
+from structs.prefixtree.node import PrefixTreeNode
 from structs.stack import Stack
 
 WILDCARD: Final[str] = "**"

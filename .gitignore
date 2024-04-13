@@ -1,2 +1,5 @@
 
 .DS_Store
+/backend/temp
+*__pycache__
+*.mypy_cache
