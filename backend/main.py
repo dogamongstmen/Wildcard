@@ -5,8 +5,8 @@ from typing import Dict, List, TypedDict, cast
 from server.handling.request import Request
 from server.handling.response import Response
 from server.routing.route import Route
-from server.serve.basehandler import ExtendedHTTPRequestHandler
-from server.serve.baseserver import BaseServer
+from server.serve.internalhandler import ExtendedHTTPRequestHandler
+from server.serve.internalserver import ExtendedHTTPServer
 from structs.prefixtree.tree import PrefixTree
 from server.routing.utils import route_path_to_trie_key, trie_route_search
 
@@ -86,7 +86,7 @@ def main() -> None:
     )
 
     test_state: List[str] = ["🍇", "🍉", "🍊", "🍌", "🥭", "🫐", "🍎"]
-    httpd: BaseServer[List[str]] = BaseServer(
+    httpd: ExtendedHTTPServer[List[str]] = ExtendedHTTPServer(
         ("", 5000), ExtendedHTTPRequestHandler, routes, test_state
     )
     httpd.serve_forever()

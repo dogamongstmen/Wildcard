@@ -6,12 +6,12 @@ from server.handling.request import Request
 from server.handling.response import Response
 from server.routing.route import Route
 from server.routing.utils import route_path_to_trie_key, trie_route_search
-from server.serve.baseserver import BaseServer
+from server.serve.internalserver import ExtendedHTTPServer
 
 
 class ExtendedHTTPRequestHandler(BaseHTTPRequestHandler):
 
-    server: BaseServer
+    server: ExtendedHTTPServer
 
     # Remove "Server" header.
     def send_response(self, code: int, message: str | None = None) -> None:

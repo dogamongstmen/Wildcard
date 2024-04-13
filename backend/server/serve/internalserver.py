@@ -5,7 +5,7 @@ from server.routing.route import Route
 from structs.prefixtree.tree import PrefixTree
 
 T = TypeVar("T")
-class BaseServer(Generic[T], ThreadingHTTPServer):
+class ExtendedHTTPServer(Generic[T], ThreadingHTTPServer):
 
     routes: PrefixTree[Route]
     state: T
