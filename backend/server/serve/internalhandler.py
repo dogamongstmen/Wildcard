@@ -42,11 +42,11 @@ class ExtendedHTTPRequestHandler(BaseHTTPRequestHandler):
         params: Dict[str, str] = dict()
         if route == None or not route._populate_params(param_values, out_params=params):
             self.server.not_found_handler(
+                self.server.state,
                 Request(
                     self.path,
                     RequestMethod[method_string],
                     headers,
-                    self.server.state,
                     params,
                     self.rfile,
                 ),
@@ -64,13 +64,12 @@ class ExtendedHTTPRequestHandler(BaseHTTPRequestHandler):
             self.path,
             RequestMethod[method_string],
             headers,
-            self.server.state,
             params,
             self.rfile,
         )
         res: Response = Response(self)
 
-        route.handlers[method_string](req, res)
+        route.handlers[method_string](self.server.state, req, res)
 
         # Maybe throw an error?
         if not res._sent:

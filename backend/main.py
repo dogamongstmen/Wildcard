@@ -71,21 +71,7 @@ def main() -> None:
     input("Press ENTER to shut down the server: \n")
     app.shutdown()
 
-    # db: Database = db_client.get_database(DB_FLASHCARD_DATA)
-    # col: Collection[CardSet] = db.get_collection(COLLECTION_CARD_SETS)
-
-    # card_sets: Cursor[CardSet] = col.find()
-    # for card_col in card_sets:
-
-    #     id_bin: bytes = card_col["_id"].binary
-
-    #     print(id_bin[0:4].hex())
-    #     print(id_bin[4:9].hex())
-    #     print(id_bin[9:12].hex(), "\n")
-
-    #     print(id_bin.hex())
-
-    # db_client.close()
+    app_state.db_client.close()
 
 
 main()

@@ -10,6 +10,6 @@ class CardSetParams(TypedDict):
 
 # URL: "/collections/:set_id"
 def page_get_card_set_handler(
-    req: Request[ApplicationState, CardSetParams], res: Response
+    state: ApplicationState, req: Request[CardSetParams], res: Response
 ) -> None:
     res.html(f"<h1>Card collection: {req.params['set_id']}</h1>")

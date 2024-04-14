@@ -11,7 +11,7 @@ class CardSetParams(TypedDict):
 # Method: GET
 # URL: /api/sets/:set_id
 def api_get_single_card_set_handler(
-    req: Request[ApplicationState, CardSetParams], res: Response
+    state: ApplicationState, req: Request[CardSetParams], res: Response
 ) -> None:
     res.html(f"<h1>Cards: {req.params['set_id']}</h1>")
 
@@ -19,7 +19,7 @@ def api_get_single_card_set_handler(
 # Method: POST
 # URL: /api/sets/:set_id
 def api_add_single_card_set_handler(
-    req: Request[ApplicationState, CardSetParams], res: Response
+    state: ApplicationState, req: Request[CardSetParams], res: Response
 ) -> None:
     # req._buffer
     res.status(400).json('{"message":"Added something."}')
@@ -28,7 +28,7 @@ def api_add_single_card_set_handler(
 # Method: DELETE
 # URL: /api/sets/:set_id
 def api_delete_single_card_set_handler(
-    req: Request[ApplicationState, CardSetParams], res: Response
+    state: ApplicationState, req: Request[CardSetParams], res: Response
 ) -> None:
     # req._buffer
     res.status(400).json('{"message":"Added something."}')
