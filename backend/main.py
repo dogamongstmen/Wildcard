@@ -19,8 +19,11 @@ from application.endpoints.pages.home import page_home_handler
 from application.endpoints.pages.singlecardset import page_get_card_set_handler
 from application.state import ApplicationState
 from db.credentials import get_db_credentials
+from db.databases import DB_FLASHCARD_DATA
 from server.routing.route import Route
 from server.server import Server
+
+from pymongo.database import Database
 
 PORT: Final[int] = 5000
 
@@ -29,9 +32,9 @@ def main() -> None:
 
     credentials: str = get_db_credentials()
     db_client: MongoClient = MongoClient(credentials)
+    card_data_db: Database = db_client.get_database(DB_FLASHCARD_DATA)
 
-    app_state: ApplicationState = ApplicationState(db_client)
-
+    app_state: ApplicationState = ApplicationState(card_data_db)
     app: Server[ApplicationState] = Server(app_state)
 
     # Viewable pages.
@@ -71,7 +74,7 @@ def main() -> None:
     input("Press ENTER to shut down the server: \n")
     app.shutdown()
 
-    app_state.db_client.close()
+    db_client.close()
 
 
 main()

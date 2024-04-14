@@ -1,9 +1,9 @@
-from pymongo import MongoClient
+from pymongo.database import Database
 
 
 class ApplicationState:
 
-    db_client: MongoClient
+    card_data_db: Database
 
-    def __init__(self, client: MongoClient) -> None:
-        self.db_client = client
+    def __init__(self, db: Database) -> None:
+        self.card_data_db = db

@@ -1,14 +1,11 @@
 import json
 from application.state import ApplicationState
 from db.collections import COLLECTION_CARD_SETS
-from db.databases import DB_FLASHCARD_DATA
 from db.types.cardset import CardSet
 from server.handling.request import Request
 from server.handling.response import Response
 
-from pymongo.database import Database
 from pymongo.collection import Collection
-from pymongo.cursor import Cursor
 
 
 # Method: GET
@@ -17,22 +14,25 @@ def api_get_card_set_handler(
     state: ApplicationState, req: Request[None], res: Response
 ) -> None:
 
-    db: Database = state.db_client.get_database(DB_FLASHCARD_DATA)
-    col: Collection[CardSet] = db.get_collection(COLLECTION_CARD_SETS)
-
-    card_sets: Cursor[CardSet] = col.find()
-    for card_col in card_sets:
-
-        id_bin: bytes = card_col["_id"].binary
-
-        print(id_bin[0:4].hex())
-        print(id_bin[4:9].hex())
-        print(id_bin[9:12].hex(), "\n")
-
-        print(id_bin.hex())
+    card_set_collection: Collection[CardSet] = state.card_data_db.get_collection(
+        COLLECTION_CARD_SETS
+    )
 
     res.json(
-        json.dumps({"sets": [{"id": "1"}, {"id": "2"}, {"id": "..."}, {"id": "n"}]})
+        json.dumps(
+            {
+                "sets": [
+                    {
+                        "name": card_set["name"],
+                        "cover_img": card_set["cover_img"],
+                        "card_ids": [
+                            str(c_object_id) for c_object_id in card_set["card_ids"]
+                        ],
+                    }
+                    for card_set in card_set_collection.find()
+                ]
+            }
+        )
     )
 
 
