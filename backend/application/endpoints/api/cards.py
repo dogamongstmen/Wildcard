@@ -1,3 +1,4 @@
+import json
 from typing import TypedDict
 
 from application.state import ApplicationState
@@ -11,23 +12,23 @@ class CardEndpointParams(TypedDict):
 
 # Method: GET
 # URL: /api/cards/:card_id
-def get_card_handler(
+def api_get_card_handler(
     req: Request[ApplicationState, CardEndpointParams], res: Response
 ) -> None:
-    res.html(f"<h1>Card {req.params['card_id']}</h1>")
+    res.json(json.dumps({"message": f"This is card {req.params['card_id']}"}))
 
 
 # Method: PATCH
 # URL: /api/cards/:card_id
-def update_card_handler(
+def api_update_card_handler(
     req: Request[ApplicationState, CardEndpointParams], res: Response
 ) -> None:
-    res.html(f"<h1>Card {req.params['card_id']}, but different</h1>")
+    res.json(json.dumps({"message": f"Changed card {req.params['card_id']}"}))
 
 
 # Method: DELETE
 # URL: /api/cards/:card_id
-def remove_card_handler(
+def api_remove_card_handler(
     req: Request[ApplicationState, CardEndpointParams], res: Response
 ) -> None:
-    res.html(f"<h1>Goodbye {req.params['card_id']}</h1>")
+    res.json(json.dumps({"message": f"Goodbye, card {req.params['card_id']}"}))

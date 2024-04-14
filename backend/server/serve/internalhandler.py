@@ -40,7 +40,7 @@ class ExtendedHTTPRequestHandler(BaseHTTPRequestHandler):
             headers[key.lower()] = header_values[i]
 
         params: Dict[str, str] = dict()
-        if route == None or not route.populate_params(param_values, out_params=params):
+        if route == None or not route._populate_params(param_values, out_params=params):
             self.server.not_found_handler(
                 Request(
                     self.path,

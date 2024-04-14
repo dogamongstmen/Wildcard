@@ -5,12 +5,24 @@ from structs.prefixtree.tree import WILDCARD, PrefixTree
 
 
 def route_path_to_trie_key(route: str) -> str:
-    key: str = "/"
-    for sub in route.split("/"):
-        if not sub.startswith(":"):
-            key += sub
-        else:
+    key: str = ""
+
+    i: int = 0
+    while i < len(route):
+        sub: str = route[i]
+
+        if sub == ":":
+            j: int = i + 1
+            while j < len(route) and route[j] != "/":
+                j += 1
+            i = j
             key += "*"
+        else:
+            key += sub
+
+        # Inc
+        i += 1
+
     return key
 
 
@@ -33,6 +45,8 @@ def trie_route_search(
         )
 
         if next_node == None:
+            # print("\t", key)
+
             wild_node = cast(PrefixTreeNode[T], current.children.get(WILDCARD))
 
             if wild_node == None:
@@ -48,9 +62,11 @@ def trie_route_search(
             i = j
             out_params.append(segment)
         else:
+            # print(key)
             current = next_node
 
         # Increment
         i += 1
 
+    print("\n")
     return current.value

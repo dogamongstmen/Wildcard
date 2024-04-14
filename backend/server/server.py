@@ -20,6 +20,7 @@ class Server(Generic[StateType]):
     _listening_thread: Optional[Thread]
     __is_listening: bool
     __server: Optional[ExtendedHTTPServer]
+    __socket: Optional[Socket]
 
     state: StateType
     routes: PrefixTree[Route]
@@ -34,8 +35,10 @@ class Server(Generic[StateType]):
         self._listening_thread = None
         self.__server = None
         self.not_found_handler = default_404_handler
+        self.__socket = None
 
     def route(self, route: Route) -> Self:
+        print(route_path_to_trie_key(route.path))
         self.routes.insert(route_path_to_trie_key(route.path), route)
         return self
 
@@ -43,7 +46,7 @@ class Server(Generic[StateType]):
         self.not_found_handler = handler
         return self
 
-    def shutdown(self, socket: Socket) -> None:
+    def shutdown(self) -> None:
         cast(ExtendedHTTPServer, self.__server).shutdown()
         cast(Thread, self._listening_thread).join()
 
@@ -65,4 +68,6 @@ class Server(Generic[StateType]):
         self._listening_thread = Thread(target=self.__server.serve_forever, daemon=true)
         self._listening_thread.start()
 
-        return self.__server.socket
+        self.__socket = self.__server.socket
+
+        return self.__socket

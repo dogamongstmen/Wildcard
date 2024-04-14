@@ -4,8 +4,8 @@ from server.handling.response import Response
 
 
 # Method: GET
-# URL: "/api/sets"
-def get_card_set_handler(req: Request[ApplicationState, None], res: Response) -> None:
+# URL: /api/sets
+def api_get_card_set_handler(req: Request[ApplicationState, None], res: Response) -> None:
     res.html(
         """
              <ul>
@@ -19,8 +19,8 @@ def get_card_set_handler(req: Request[ApplicationState, None], res: Response) ->
 
 
 # Method: POST
-# URL: "/api/sets"
-def create_card_set_handler(
+# URL: /api/sets
+def api_create_card_set_handler(
     req: Request[ApplicationState, None], res: Response
 ) -> None:
     # req._buffer
