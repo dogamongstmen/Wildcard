@@ -60,7 +60,7 @@ def trie_route_search(
                 # Increment
                 j += 1
             i = j
-            print(segment)
+            # print(segment)
             out_params.append(segment)
         else:
             # print(key)
