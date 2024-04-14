@@ -1,3 +1,4 @@
+import json
 from application.state import ApplicationState
 from server.handling.request import Request
 from server.handling.response import Response
@@ -5,16 +6,11 @@ from server.handling.response import Response
 
 # Method: GET
 # URL: /api/sets
-def api_get_card_set_handler(req: Request[ApplicationState, None], res: Response) -> None:
-    res.html(
-        """
-             <ul>
-             <li>Card collection 1</li>
-             <li>Card collection 2</li>
-             <li>...</li>
-             <li>Card collection <i>n</i></li>
-             </ul>
-             """
+def api_get_card_set_handler(
+    req: Request[ApplicationState, None], res: Response
+) -> None:
+    res.json(
+        json.dumps({"sets": [{"id": "1"}, {"id": "2"}, {"id": "..."}, {"id": "n"}]})
     )
 
 
@@ -24,4 +20,4 @@ def api_create_card_set_handler(
     req: Request[ApplicationState, None], res: Response
 ) -> None:
     # req._buffer
-    res.status(400).json('{"message":"Added something."}')
+    res.json(json.dumps({"message": "Added card"}))

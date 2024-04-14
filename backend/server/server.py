@@ -38,7 +38,7 @@ class Server(Generic[StateType]):
         self.__socket = None
 
     def route(self, route: Route) -> Self:
-        print(route_path_to_trie_key(route.path))
+        # print(route_path_to_trie_key(route.path))
         self.routes.insert(route_path_to_trie_key(route.path), route)
         return self
 

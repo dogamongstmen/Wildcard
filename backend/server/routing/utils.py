@@ -54,12 +54,13 @@ def trie_route_search(
 
             current = wild_node
             j: int = i + 1
-            segment: str = ""
+            segment: str = key
             while j < len(key_str) and key_str[j] != "/":
                 segment += key_str[j]
                 # Increment
                 j += 1
             i = j
+            print(segment)
             out_params.append(segment)
         else:
             # print(key)
