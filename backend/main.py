@@ -1,10 +1,13 @@
 from typing import cast
 from pymongo import MongoClient
+from pymongo.database import Database
+from pymongo.collection import Collection
+from pymongo.cursor import Cursor
 
-from db.collections import COLLECTION_CARD_COLLECTIONS
+from db.collections import COLLECTION_CARD_SETS
 from db.credentials import get_db_credentials
 from db.databases import DB_FLASHCARD_DATA
-from db.types.card_collection import CardCollection
+from db.types.cardset import CardSet
 
 
 def main() -> None:
@@ -12,13 +15,11 @@ def main() -> None:
     credentials: str = get_db_credentials()
     db_client: MongoClient = MongoClient(credentials)
 
-    db = db_client[DB_FLASHCARD_DATA]
+    db: Database = db_client.get_database(DB_FLASHCARD_DATA)
+    col: Collection[CardSet] = db.get_collection(COLLECTION_CARD_SETS)
 
-    col = db.get_collection(COLLECTION_CARD_COLLECTIONS)
-
-    card_sets = col.find()
-    for _card_col in card_sets:
-        card_col: CardCollection = cast(CardCollection, _card_col)
+    card_sets: Cursor[CardSet] = col.find()
+    for card_col in card_sets:
 
         id_bin: bytes = card_col["_id"].binary
 
