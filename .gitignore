@@ -3,3 +3,5 @@
 /backend/temp
 *__pycache__
 *.mypy_cache
+backend/venv/
+backend/db/db_cred.txt

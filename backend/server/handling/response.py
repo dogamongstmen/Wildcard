@@ -2,7 +2,7 @@ from http.server import BaseHTTPRequestHandler
 import json
 from typing import Any, Dict, Self
 
-from commontypes.boolean import false, true
+from common.types.boolean import false, true
 
 
 class Response:
@@ -10,7 +10,7 @@ class Response:
     _sent: bool
     __handler_ref: BaseHTTPRequestHandler
 
-    status_code: int = 200
+    __status_code: int = 200
     headers: Dict[str, str]
 
     def __init__(self, ref: BaseHTTPRequestHandler) -> None:
@@ -24,7 +24,7 @@ class Response:
         return self
 
     def status(self, code: int) -> Self:
-        self.status_code = code
+        self.__status_code = code
         return self
 
     def html(self, html: str):
@@ -41,7 +41,7 @@ class Response:
 
         self._sent = true
 
-        self.__handler_ref.send_response(self.status_code)
+        self.__handler_ref.send_response(self.__status_code)
 
         for key in self.headers:
             self.__handler_ref.send_header(key, self.headers[key])

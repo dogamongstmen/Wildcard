@@ -1,8 +1,8 @@
-from socket import SHUT_RDWR, socket
+from socket import socket
 from threading import Thread
-from typing import Generic, Optional, Self, Tuple, TypeVar, cast
+from typing import Generic, Optional, Self, TypeVar, cast
 
-from commontypes.boolean import false, true
+from common.types.boolean import false, true
 from server.handling.handler import RequestHandler, default_404_handler
 from server.routing.route import Route
 from server.routing.utils import route_path_to_trie_key

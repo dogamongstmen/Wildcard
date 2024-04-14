@@ -1,11 +1,11 @@
 from http.server import BaseHTTPRequestHandler
-from typing import Dict, Generic, List, Optional, TypeVar, cast
+from typing import Dict, List, cast
 
 from server.handling.method import RequestMethod
 from server.handling.request import Request
 from server.handling.response import Response
 from server.routing.route import Route
-from server.routing.utils import route_path_to_trie_key, trie_route_search
+from server.routing.utils import trie_route_search
 from server.serve.internalserver import ExtendedHTTPServer
 
 

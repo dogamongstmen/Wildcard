@@ -1,67 +1,34 @@
-from threading import Thread
-from typing import List, Optional, TypedDict, cast
-from server.handling.request import Request
-from server.handling.response import Response
-from server.routing.route import Route
-from server.server import Server, Socket
+from typing import cast
+from pymongo import MongoClient
 
-
-class BaseProfileParams(TypedDict):
-    profile_id: str
-
-
-def base_profile_handler(
-    req: Request[List[str], BaseProfileParams], res: Response
-) -> None:
-    # print("Profile id: ", req.params.get("profile_id"))
-    res.html(f'<h1>Profile: {req.params.get("profile_id")}</h1>')
-
-
-def profile_comments_handler(
-    req: Request[List[str], BaseProfileParams], res: Response
-) -> None:
-    # print("Profile id: ", req.params.get("profile_id"))
-    res.html(
-        f"""<h1>Profile: {req.params.get("profile_id")}</h1>
-             <ul>
-             <li>1</l1>
-             <li>2</l1>
-             <li>...</l1>
-             <li>n</l1>
-             </ul>"""
-    )
-
-
-class ProfileCommentParams(TypedDict):
-    profile_id: str
-    comment_id: str
-
-
-def profile_single_comment_handler(
-    req: Request[List[str], ProfileCommentParams], res: Response
-) -> None:
-    # print("Profile id: ", req.params.get("profile_id"))
-    res.html(f'<h1>{req.params.get("profile_id")}->{req.params.get("comment_id")}</h1>')
+from db.collections import COLLECTION_CARD_COLLECTIONS
+from db.credentials import get_db_credentials
+from db.databases import DB_FLASHCARD_DATA
+from db.types.card_collection import CardCollection
 
 
 def main() -> None:
 
-    fruits: List[str] = ["🍇", "🍉", "🍊", "🍌", "🥭", "🫐", "🍎"]
-    server: Server[List[str]] = Server(fruits)
+    credentials: str = get_db_credentials()
+    db_client: MongoClient = MongoClient(credentials)
 
-    server.route(Route("/profile/:profile_id").get(base_profile_handler))
-    server.route(Route("/profile/:profile_id/comments").get(profile_comments_handler))
-    server.route(
-        Route("/profile/:profile_id/comments/:comment_id").get(
-            profile_single_comment_handler
-        )
-    )
+    db = db_client[DB_FLASHCARD_DATA]
 
-    socket: Socket = cast(Socket, server.listen("", 5000))
+    col = db.get_collection(COLLECTION_CARD_COLLECTIONS)
 
-    # Block the main thread.
-    input("Press enter to shutdown the server: ")
-    server.shutdown(socket)
+    card_sets = col.find()
+    for _card_col in card_sets:
+        card_col: CardCollection = cast(CardCollection, _card_col)
+
+        id_bin: bytes = card_col["_id"].binary
+
+        print(id_bin[0:4].hex())
+        print(id_bin[4:9].hex())
+        print(id_bin[9:12].hex(), "\n")
+
+        print(id_bin.hex())
+
+    db_client.close()
 
 
 main()
