@@ -98,7 +98,7 @@ def api_create_card_handler(
         if find_set_result == None:
             res.status(404).json(
                 NotFoundErrorResponse(
-                    "The requested card does not exist."
+                    "The requested card set does not exist."
                 ).to_serializable()
             )
             return

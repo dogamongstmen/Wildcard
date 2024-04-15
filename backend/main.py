@@ -4,6 +4,10 @@ from application.routes.api.endpoints.cardsets.cardsets import (
     api_create_card_set_handler,
     api_get_card_set_handler,
 )
+from application.routes.api.endpoints.singlecard.singlecard import (
+    get_single_card_handler,
+    update_single_card_handler,
+)
 from application.routes.api.endpoints.singlecardset.members import (
     api_create_card_handler,
     api_get_card_set_members_handler,
@@ -62,8 +66,10 @@ def main() -> None:
         .post(api_create_card_handler)
     )
 
-    api_card_set_single_card_route: Route = Route(
-        "/api/card_sets/:set_id/cards/:card_id"
+    api_card_set_single_card_route: Route = (
+        Route("/api/card_sets/:set_id/cards/:card_id")
+        .get(get_single_card_handler)
+        .patch(update_single_card_handler)
     )
 
     # Set up routes.
@@ -71,7 +77,7 @@ def main() -> None:
 
     app.route(api_card_collections_route).route(api_card_set_route).route(
         api_card_set_members_route
-    )
+    ).route(api_card_set_single_card_route)
 
     # Start server.
     socket = app.listen("", PORT)
