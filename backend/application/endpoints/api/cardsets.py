@@ -1,4 +1,10 @@
 import json
+from application.endpoints.api.types.errors import (
+    FieldErrorResponse,
+    InternalServerErrorResponse,
+    MalformedRequestErrorResponse,
+)
+from application.endpoints.api.types.responses.cardset import CardSetCollectionResponse
 from application.state import ApplicationState
 from db.collections import COLLECTION_CARD_SETS
 from db.types.cardset import CardSet
@@ -6,6 +12,9 @@ from server.handling.request import Request
 from server.handling.response import Response
 
 from pymongo.collection import Collection, InsertOneResult
+
+import logging
+import traceback
 
 
 # Method: GET
@@ -18,22 +27,7 @@ def api_get_card_set_handler(
         COLLECTION_CARD_SETS
     )
 
-    res.json(
-        json.dumps(
-            {
-                "sets": [
-                    {
-                        "name": card_set["name"],
-                        "cover_img": card_set["cover_img"],
-                        "card_ids": [
-                            str(c_object_id) for c_object_id in card_set["card_ids"]
-                        ],
-                    }
-                    for card_set in card_set_collection.find()
-                ]
-            }
-        )
-    )
+    res.json(CardSetCollectionResponse(card_set_collection.find()).to_serializable())
 
 
 # Method: POST
@@ -44,10 +38,8 @@ def api_create_card_set_handler(
     try:
         body: CardSet = json.loads(req._buffer.read(int(req.headers["content-length"])))
 
-        if body["name"] == None:
-            res.status(400).json(
-                '{"error":"Request body must contain a `name` field."}'
-            )
+        if body.get("name") == None:
+            res.status(400).json(FieldErrorResponse("name").to_serializable())
             return
 
         card_set_collection: Collection[CardSet] = state.card_data_db.get_collection(
@@ -62,8 +54,11 @@ def api_create_card_set_handler(
 
         result: InsertOneResult = card_set_collection.insert_one(insert_data)
 
-        print(result)
+        res.json({"set_id": str(result.inserted_id)})
 
-        res.json(json.dumps({"set_id": str(result.inserted_id)}))
-    except:
-        res.status(400).json('{"error": "Malformed request data."}')
+    except TypeError:
+        res.status(400).json(MalformedRequestErrorResponse().to_serializable())
+        logging.error(traceback.format_exc())
+    except Exception:
+        res.status(500).json(InternalServerErrorResponse().to_serializable())
+        logging.error(traceback.format_exc())

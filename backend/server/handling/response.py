@@ -31,7 +31,7 @@ class Response:
         self.header("content-type", "text/html")
         self.send(bytearray(html, "utf-8"))
 
-    def json(self, obj: Any):
+    def json(self, obj: Dict[str, Any]):
         self.header("content-type", "application/json")
         self.send(bytearray(json.dumps(obj), "utf-8"))
 
