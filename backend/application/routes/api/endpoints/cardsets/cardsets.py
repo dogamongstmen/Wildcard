@@ -1,10 +1,13 @@
 import json
-from application.endpoints.api.types.errors import (
+from application.routes.api.responsetypes.errors.errors import (
     FieldErrorResponse,
     InternalServerErrorResponse,
     MalformedRequestErrorResponse,
 )
-from application.endpoints.api.types.responses.cardset import CardSetCollectionResponse
+from application.routes.api.responsetypes.standard.cardset import (
+    CardSetCollectionResponse,
+    CreateCardSetResponse,
+)
 from application.state import ApplicationState
 from db.collections import COLLECTION_CARD_SETS
 from db.types.cardset import CardSet
@@ -18,7 +21,7 @@ import traceback
 
 
 # Method: GET
-# URL: /api/sets
+# URL: /api/card_sets
 def api_get_card_set_handler(
     state: ApplicationState, req: Request[None], res: Response
 ) -> None:
@@ -31,7 +34,7 @@ def api_get_card_set_handler(
 
 
 # Method: POST
-# URL: /api/sets
+# URL: /api/card_sets
 def api_create_card_set_handler(
     state: ApplicationState, req: Request[None], res: Response
 ) -> None:
@@ -54,11 +57,12 @@ def api_create_card_set_handler(
 
         result: InsertOneResult = card_set_collection.insert_one(insert_data)
 
-        res.json({"set_id": str(result.inserted_id)})
+        res.json(CreateCardSetResponse(result.inserted_id).to_serializable())
 
-    except TypeError:
+    except json.JSONDecodeError:
         res.status(400).json(MalformedRequestErrorResponse().to_serializable())
-        logging.error(traceback.format_exc())
     except Exception:
         res.status(500).json(InternalServerErrorResponse().to_serializable())
         logging.error(traceback.format_exc())
+
+

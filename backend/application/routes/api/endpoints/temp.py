@@ -6,12 +6,13 @@ from typing import Dict, Optional, TypedDict, cast
 from bson import ObjectId
 from pymongo import ReturnDocument
 
-from application.endpoints.api.types.errors import (
+from application.routes.api.responsetypes.errors.errors import (
     FieldErrorResponse,
     InternalServerErrorResponse,
+    MalformedRequestErrorResponse,
     NotFoundErrorResponse,
 )
-from application.endpoints.api.types.responses.flashcard import FlashcardResponse
+from application.routes.api.responsetypes.standard.flashcard import FlashcardResponse
 from application.state import ApplicationState
 from db.collections import COLLECTION_CARDS
 from db.types.card import Flashcard
@@ -25,7 +26,6 @@ from bson.errors import InvalidId
 
 class CardEndpointParams(TypedDict):
     card_id: str
-
 
 # Method: GET
 # URL: /api/cards/:card_id
@@ -62,7 +62,6 @@ def api_get_card_handler(
                 "The requested card does not exist."
             ).to_serializable()
         )
-        logging.error(traceback.format_exc())
     except Exception:
         res.status(500).json(InternalServerErrorResponse().to_serializable())
         logging.error(traceback.format_exc())
@@ -113,13 +112,14 @@ def api_update_card_handler(
 
         res.json(FlashcardResponse(result).to_serializable())
 
+    except TypeError:
+        res.status(400).json(MalformedRequestErrorResponse().to_serializable())
     except InvalidId:
         res.status(404).json(
             NotFoundErrorResponse(
                 "The requested card does not exist."
             ).to_serializable()
         )
-        logging.error(traceback.format_exc())
     except Exception:
         res.status(500).json(InternalServerErrorResponse().to_serializable())
         logging.error(traceback.format_exc())
@@ -159,7 +159,6 @@ def api_remove_card_handler(
                 "The requested card does not exist."
             ).to_serializable()
         )
-        logging.error(traceback.format_exc())
     except Exception:
         res.status(500).json(InternalServerErrorResponse().to_serializable())
         logging.error(traceback.format_exc())
