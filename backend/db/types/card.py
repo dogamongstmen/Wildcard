@@ -34,3 +34,9 @@ def update_flashcard(
         {"$set": update},
         return_document=ReturnDocument.AFTER,
     )
+
+
+def delete_flashcard(
+    col: Collection[Flashcard], set_id: ObjectId, card_id: ObjectId
+) -> Flashcard:
+    return col.find_one_and_delete({"_id": card_id, "parent_id": set_id})

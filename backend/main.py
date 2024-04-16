@@ -5,6 +5,7 @@ from application.routes.api.endpoints.cardsets.cardsets import (
     api_get_card_set_handler,
 )
 from application.routes.api.endpoints.singlecard.singlecard import (
+    delete_single_card_handler,
     get_single_card_handler,
     update_single_card_handler,
 )
@@ -70,6 +71,7 @@ def main() -> None:
         Route("/api/card_sets/:set_id/cards/:card_id")
         .get(get_single_card_handler)
         .patch(update_single_card_handler)
+        .delete(delete_single_card_handler)
     )
 
     # Set up routes.
