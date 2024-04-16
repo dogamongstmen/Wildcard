@@ -15,6 +15,7 @@ from application.routes.api.responsetypes.errors.errors import (
 from application.routes.api.responsetypes.standard.cardset import CardSetResponse
 from application.state import ApplicationState
 from db.collections import COLLECTION_CARD_SETS
+from db.db import DbCollection
 from db.types.cardset import (
     CardSet,
     delete_card_set_by_id,
@@ -23,8 +24,6 @@ from db.types.cardset import (
 )
 from server.handling.request import Request
 from server.handling.response import Response
-
-from pymongo.collection import Collection
 
 
 class CardSetParams(TypedDict):
@@ -38,7 +37,7 @@ def api_get_single_card_set_handler(
 ) -> None:
 
     try:
-        set_col: Collection[CardSet] = state.card_data_db.get_collection(
+        set_col: DbCollection[CardSet] = state.card_data_db.get_collection(
             COLLECTION_CARD_SETS
         )
 
@@ -80,7 +79,7 @@ def api_update_single_card_set_handler(
             res.status(400).json(FieldErrorResponse("name").to_serializable())
             return
 
-        set_col: Collection[CardSet] = state.card_data_db.get_collection(
+        set_col: DbCollection[CardSet] = state.card_data_db.get_collection(
             COLLECTION_CARD_SETS
         )
 
@@ -118,7 +117,7 @@ def api_delete_single_card_set_handler(
 ) -> None:
 
     try:
-        set_col: Collection[CardSet] = state.card_data_db.get_collection(
+        set_col: DbCollection[CardSet] = state.card_data_db.get_collection(
             COLLECTION_CARD_SETS
         )
 

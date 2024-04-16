@@ -1,11 +1,9 @@
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 from bson import ObjectId
 
-from pymongo.cursor import Cursor
-
 from application.routes.api.responsetypes.base import SerializableResponse
-from application.routes.api.responsetypes.standard.flashcard import FlashcardResponse
+from db.db import DbCursor
 from db.types.card import Flashcard
 from db.types.cardset import CardSet
 
@@ -13,7 +11,7 @@ from db.types.cardset import CardSet
 class CardSetMembersResponse(SerializableResponse):
     cards: Dict[str, Dict[str, Any]]
 
-    def __init__(self, cards: Cursor[Flashcard]) -> None:
+    def __init__(self, cards: DbCursor[Flashcard]) -> None:
         super().__init__()
 
         self.cards = dict()
@@ -44,7 +42,7 @@ class CardSetResponse(SerializableResponse):
 class CardSetCollectionResponse(SerializableResponse):
     card_sets: Dict[str, Dict[str, Any]]
 
-    def __init__(self, card_sets: Cursor[CardSet]) -> None:
+    def __init__(self, card_sets: DbCursor[CardSet]) -> None:
         super().__init__()
         self.card_sets = dict()
         for card_set in card_sets:

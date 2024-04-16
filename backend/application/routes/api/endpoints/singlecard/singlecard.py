@@ -12,12 +12,10 @@ from application.routes.api.responsetypes.errors.errors import (
 from application.routes.api.responsetypes.standard.flashcard import FlashcardResponse
 from application.state import ApplicationState
 from db.collections import COLLECTION_CARDS
+from db.db import DbCollection
 from db.types.card import Flashcard, delete_flashcard, read_flashcard, update_flashcard
 from server.handling.request import Request
 from server.handling.response import Response
-
-
-from pymongo.collection import Collection
 
 
 class SingleCardParams(CardSetParams):
@@ -47,7 +45,7 @@ def get_single_card_handler(
             )
             return
 
-        card_col: Collection[Flashcard] = state.card_data_db.get_collection(
+        card_col: DbCollection[Flashcard] = state.card_data_db.get_collection(
             COLLECTION_CARDS
         )
 
@@ -99,7 +97,7 @@ def update_single_card_handler(
             )
             return
 
-        card_col: Collection[Flashcard] = state.card_data_db.get_collection(
+        card_col: DbCollection[Flashcard] = state.card_data_db.get_collection(
             COLLECTION_CARDS
         )
 
@@ -147,7 +145,7 @@ def delete_single_card_handler(
             )
             return
 
-        card_col: Collection[Flashcard] = state.card_data_db.get_collection(
+        card_col: DbCollection[Flashcard] = state.card_data_db.get_collection(
             COLLECTION_CARDS
         )
 

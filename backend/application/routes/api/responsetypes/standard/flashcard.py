@@ -1,6 +1,4 @@
-from typing import cast
 from bson import ObjectId
-from pymongo.collection import Collection
 
 from application.routes.api.responsetypes.base import SerializableResponse
 from db.types.card import Flashcard
@@ -23,4 +21,3 @@ class FlashcardResponse(SerializableResponse):
         self.q = f["q"]
         self.a = f["a"]
         # self.id = str(f["_id"])
-

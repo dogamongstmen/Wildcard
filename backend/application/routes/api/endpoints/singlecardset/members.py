@@ -16,16 +16,13 @@ from application.routes.api.responsetypes.standard.flashcard import (
 )
 from application.state import ApplicationState
 from db.collections import COLLECTION_CARD_SETS, COLLECTION_CARDS
+from db.db import DbCollection, DbCursor, InsertOneResult
 from db.types.card import Flashcard
 from db.types.cardset import CardSet, read_card_set_by_id
 from server.handling.request import Request
 from server.handling.response import Response
 
-from pymongo.collection import Collection
 from bson.errors import InvalidId
-
-from pymongo.results import InsertOneResult
-from pymongo.cursor import Cursor
 
 
 # Method: GET
@@ -35,11 +32,11 @@ def api_get_card_set_members_handler(
 ):
     try:
 
-        set_col: Collection[CardSet] = state.card_data_db.get_collection(
+        set_col: DbCollection[CardSet] = state.card_data_db.get_collection(
             COLLECTION_CARD_SETS
         )
 
-        cards_col: Collection[Flashcard] = state.card_data_db.get_collection(
+        cards_col: DbCollection[Flashcard] = state.card_data_db.get_collection(
             COLLECTION_CARDS
         )
 
@@ -55,7 +52,7 @@ def api_get_card_set_members_handler(
             )
             return
 
-        found_cards: Cursor[Flashcard] = cards_col.find({"parent_id": set_id})
+        found_cards: DbCursor[Flashcard] = cards_col.find({"parent_id": set_id})
 
         resbody = CardSetMembersResponse(found_cards)
 
@@ -90,7 +87,7 @@ def api_create_card_handler(
 
         set_id: ObjectId = ObjectId(req.params["set_id"])
 
-        set_col: Collection[CardSet] = state.card_data_db.get_collection(
+        set_col: DbCollection[CardSet] = state.card_data_db.get_collection(
             COLLECTION_CARD_SETS
         )
 
@@ -103,7 +100,7 @@ def api_create_card_handler(
             )
             return
 
-        cards_col: Collection[Flashcard] = state.card_data_db.get_collection(
+        cards_col: DbCollection[Flashcard] = state.card_data_db.get_collection(
             COLLECTION_CARDS
         )
 

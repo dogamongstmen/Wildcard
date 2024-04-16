@@ -1,4 +1,4 @@
-from pymongo.database import Database
+from db.db import Database
 
 
 class ApplicationState:
