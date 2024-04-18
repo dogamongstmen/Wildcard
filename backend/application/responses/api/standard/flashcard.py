@@ -1,6 +1,6 @@
 from bson import ObjectId
 
-from application.routes.api.responsetypes.base import SerializableResponse
+from application.responses.api.base import SerializableResponse
 from db.types.card import Flashcard
 
 

@@ -1,8 +1,7 @@
 from typing import Any, Dict, Optional
 
 from bson import ObjectId
-
-from application.routes.api.responsetypes.base import SerializableResponse
+from application.responses.api.base import SerializableResponse
 from db.db import DbCursor
 from db.types.card import Flashcard
 from db.types.cardset import CardSet

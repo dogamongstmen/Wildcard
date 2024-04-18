@@ -1,10 +1,10 @@
 import json
-from application.routes.api.responsetypes.errors.errors import (
+from application.responses.api.errors.errors import (
     FieldErrorResponse,
     InternalServerErrorResponse,
     MalformedRequestErrorResponse,
 )
-from application.routes.api.responsetypes.standard.cardset import (
+from application.responses.api.standard.cardset import (
     CardSetCollectionResponse,
     CreateCardSetResponse,
 )

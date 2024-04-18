@@ -5,3 +5,5 @@
 *.mypy_cache
 backend/venv/
 backend/db/db_cred.txt
+frontend/bun.lockb
+frontend

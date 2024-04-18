@@ -1,5 +1,4 @@
 from typing import Final
-from pymongo import MongoClient
 from application.routes.api.endpoints.cardsets.cardsets import (
     api_create_card_set_handler,
     api_get_card_set_handler,

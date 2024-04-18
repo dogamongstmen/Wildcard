@@ -1,7 +1,7 @@
 
 
 
-from application.routes.api.responsetypes.base import SerializableResponse
+from application.responses.api.base import SerializableResponse
 
 
 class BaseErrorResponse(SerializableResponse):

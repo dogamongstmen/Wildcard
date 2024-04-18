@@ -3,17 +3,15 @@ import logging
 import traceback
 
 from bson import ObjectId
-from application.routes.api.endpoints.singlecardset.root import CardSetParams
-from application.routes.api.responsetypes.errors.errors import (
+from application.responses.api.errors.errors import (
     FieldErrorResponse,
     InternalServerErrorResponse,
     MalformedRequestErrorResponse,
     NotFoundErrorResponse,
 )
-from application.routes.api.responsetypes.standard.cardset import CardSetMembersResponse
-from application.routes.api.responsetypes.standard.flashcard import (
-    CreatedFlashcardResponse,
-)
+from application.responses.api.standard.cardset import CardSetMembersResponse
+from application.responses.api.standard.flashcard import CreatedFlashcardResponse
+from application.routes.api.endpoints.singlecardset.root import CardSetParams
 from application.state import ApplicationState
 from db.collections import COLLECTION_CARD_SETS, COLLECTION_CARDS
 from db.db import DbCollection, DbCursor, InsertOneResult
@@ -64,7 +62,6 @@ def api_get_card_set_members_handler(
                 "The requested card set does not exist."
             ).to_serializable()
         )
-        logging.error(traceback.format_exc())
     except Exception:
         res.status(500).json(InternalServerErrorResponse().to_serializable())
         logging.error(traceback.format_exc())
@@ -121,7 +118,6 @@ def api_create_card_handler(
                 "The requested card set does not exist."
             ).to_serializable()
         )
-        logging.error(traceback.format_exc())
     except Exception:
         res.status(500).json(InternalServerErrorResponse().to_serializable())
         logging.error(traceback.format_exc())

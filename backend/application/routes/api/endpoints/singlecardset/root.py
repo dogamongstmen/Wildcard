@@ -6,13 +6,13 @@ from typing import TypedDict
 
 from bson import ObjectId
 from bson.errors import InvalidId
-from application.routes.api.responsetypes.errors.errors import (
+from application.responses.api.errors.errors import (
     FieldErrorResponse,
     InternalServerErrorResponse,
     MalformedRequestErrorResponse,
     NotFoundErrorResponse,
 )
-from application.routes.api.responsetypes.standard.cardset import CardSetResponse
+from application.responses.api.standard.cardset import CardSetResponse
 from application.state import ApplicationState
 from db.collections import COLLECTION_CARD_SETS
 from db.db import DbCollection
@@ -138,8 +138,7 @@ def api_delete_single_card_set_handler(
             NotFoundErrorResponse(
                 "The requested card set does not exist."
             ).to_serializable()
-        )
-        logging.error(traceback.format_exc())
+        ) 
     except Exception:
         res.status(500).json(InternalServerErrorResponse().to_serializable())
         logging.error(traceback.format_exc())
