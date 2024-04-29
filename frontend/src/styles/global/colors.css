@@ -1,0 +1,16 @@
+/* Background colors. */
+/* In 60-30-10 we trust. */
+:root {
+  --background-1: hsl(132, 8%, 10%);
+
+  --foreground-1: hsl(164, 16%, 18%);
+  /* --foreground-1-hover: hsl(164, 20%, 22%); */
+
+
+}
+
+/* UI colors. */
+:root {
+  --button-color: hsl(164, 30%, 32%);
+  --button-color-hover: hsl(164, 30%, 38%);
+}

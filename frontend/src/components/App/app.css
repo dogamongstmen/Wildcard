@@ -1,0 +1,23 @@
+.background {
+  background-color: var(--background-1);
+  position: absolute;
+  z-index: 1;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+
+  overscroll-behavior-y: none;
+}
+
+.test-button {
+  background-color: var(--button-color);
+  border-radius: 12px;
+  border-style: none;
+
+  width: 150px;
+  height: 50px;
+}

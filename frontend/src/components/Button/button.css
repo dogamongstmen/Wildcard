@@ -1,0 +1,9 @@
+.button-base {
+  background-color: var(--button-color);
+  border-style: none;
+
+  cursor: pointer;
+
+  transition: 250ms;
+
+}

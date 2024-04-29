@@ -1,0 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+/* Font colors. */
+:root {
+  --text-color-header: hsl(0, 0%, 70%);
+}
+
+/* Fonts and sizes. */
+:root {
+  --font: "Open Sans", sans-serif;
+}
+
+.text,
+.header-text {
+  color: var(--text-color-header);
+  font-family: var(--font);
+}
+
+.no-select {
+  user-select: none;
+}
